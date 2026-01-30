@@ -3,6 +3,31 @@ const { getFutureDateRanges } = require('./dateHelper');
 
 const CITY = 'Goa';
 
+
+
+// ✅ Popup handler function (ADD THIS AT TOP)
+async function closePopup(page) {
+  try {
+    // Genius / Sign-in popup
+    const genius = page.locator('button[aria-label*="Dismiss"]');
+    if (await genius.isVisible({ timeout: 3000 })) {
+      await genius.click();
+      console.log('Genius popup closed');
+    }
+
+    // Cookie popup
+    const cookie = page.locator('#onetrust-accept-btn-handler');
+    if (await cookie.isVisible({ timeout: 3000 })) {
+      await cookie.click();
+      console.log('Cookie popup accepted');
+    }
+
+  } catch (e) {
+    // ignore if not present
+  }
+}
+
+
 (async () => {
   const browser = await chromium.launch({ headless: false });
   const page = await browser.newPage();
